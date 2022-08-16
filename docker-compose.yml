@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+    nginx:
+        #build: 'docker/nginx'
+        image : nginx
+        ports:
+        - "443:443"
+        restart: always
+
+    db:
+        #build: 'docker/db'
+        image: mariadb
+        depends_on:
+        - nginx
+        ports:
+        - "3306"
+        volumes:
+        - db_data:/home/malbrand/data
+        environment:
+        - .env
+        restart: always
+
+    wordpress:
+        #build: 'docker/wordpress'
+        image: wordpress:php7.3-fpm-alpine
+        depends_on:
+        - db
+        ports:
+        - "9000"
+        environment:
+        - .env
+        restart: always
+
+volumes:
+    db_data: {}
