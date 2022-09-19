@@ -1,54 +1,38 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    docker-compose.yml                                 :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: malbrand <marvin@42.fr>                    +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/09/07 16:37:53 by malbrand          #+#    #+#              #
-#    Updated: 2022/09/07 17:38:55 by malbrand         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
-version: '3.9'
+version: '3'
 services:
-
-#==============================================================================#
    nginx:
       container_name: nginx
-      build: /requirements/nginx
+      build: ./requirements/nginx
       image: nginx
       env_file: .env
       ports:
-        - "443:443"
-      networks: inception
+        - 443:443
+      networks:
+        - inception
       restart: always
       depends_on:
         - mariadb
 
-#==============================================================================#
    mariadb:
       container_name: mariadb
-      build: /requirements/mariadb
+      build: ./requirements/mariadb
       image: mariadb
       env_file: .env
       ports:
         - "3306:3306"
-      networks: inception
+      networks:
+        - inception
       restart: always
 
-#==============================================================================#
    wordpress:
       container_name: wordpress
-      build: /requirements/wordpress
+      build: ./requirements/wordpress
       image: wordpress
       env_file: .env
-      networks: inception
+      networks:
+        - inception
       restart: always
       depends_on:
         - mariadb
-
-#==============================================================================#
-   networks:
-      inception:
-         name: inception
+networks:
+  inception:
