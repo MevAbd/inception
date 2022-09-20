@@ -1,7 +1,9 @@
 FROM debian:buster
 
 RUN apt-get update 
-RUN apt-get -y install mariadb-server mariadb-client
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y mariadb-server 
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y mariadb-client
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y vim
 #RUN mkdir -p /var/lib/mysql 
 #RUN chown -R root:root /var/lib/mysql 
 
@@ -15,3 +17,4 @@ RUN apt-get -y install mariadb-server mariadb-client
 EXPOSE 3306
 
 ENTRYPOINT tail -f /dev/null
+
