@@ -1,0 +1,32 @@
+server {
+
+
+#===SSL/TLS Configuration===#
+    listen 443 ssl;
+    listen [::]443 ssl;
+    server_name malbrand.42.fr
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl on;
+    ssl_prefer_server_ciphers off;
+  
+    ssl_certificate /etc/ssl/malbrand.42.fr.pem;
+    ssl_certificate_key /etc/nginx/ssl/malbrand.42.ssl.key;
+
+#===root and index and server_name===#
+    root /var/www/htmli/wordpress;
+    index index.php index.html index.htm;
+
+location / {
+        try_files $uri $uri/ /index.php?q=$uri&$args;
+    }
+location ~ \.php$ {
+        try_files $uri =404;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_pass wordpress:9000;
+        fastcgi_index index.php;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+    }
+}
+

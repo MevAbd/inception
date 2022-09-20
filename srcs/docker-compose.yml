@@ -11,7 +11,7 @@ services:
         - inception
       restart: always
       depends_on:
-        - mariadb
+        - wordpress
 
    mariadb:
       container_name: mariadb
@@ -22,6 +22,8 @@ services:
         - "3306:3306"
       networks:
         - inception
+          # volumes:
+          #- db_data:/var/lib/mysql
       restart: always
 
    wordpress:
@@ -36,3 +38,13 @@ services:
         - mariadb
 networks:
   inception:
+
+    #volumes:
+
+    #db_data:
+    #driver: local
+    #driver_opts:
+    # type: none
+    # device: /home/malbrand/data/mariadb
+    # o: bind
+
