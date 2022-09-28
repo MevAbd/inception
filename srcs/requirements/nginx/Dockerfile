@@ -1,21 +1,28 @@
-#Precise with what our image will be built
+# CHOOSE VM'S OS 
 FROM debian:buster
 
-#Install nginx
-RUN apt-get update && apt-get -y install nginx
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install openssl
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install vim
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install dumb-init
+# DOWNLOAD UTILS
 
-#Generate a self certificate
-RUN openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out /etc/ssl/malbrand.42.fr.pem -keyout /etc/ssl/malbrand.42.fr.key -subj "/C=FR/ST=Paris/L=Paris/O=42 School/OU=malbrand/CN=malbrand.42.fr"
+RUN apt-get update
+RUN apt-get -y upgrade
+RUN apt-get install -y vim
+RUN apt-get install -y curl
+RUN apt-get install -y nginx
+RUN apt-get install -y openssl
 
-#Copy the new configuration inside nginx
-COPY conf/default /etc/nginx/sites-enabled
+#SSL MANAGEMENT 
+RUN mkdir -p /etc/nginx/ssl
+RUN openssl req -x509 -nodes -out /etc/nginx/ssl/inception.crt -keyout /etc/nginx/ssl/inception.key -subj "/C=FR/ST=IDF/L=Paris/O=42/OU=42/CN=malbrand.42.fr/UID=malbrand"
+
+#CONFIG NGINX
+RUN mkdir -p /var/run/nginx
+COPY /conf/nginx.conf /etc/nginx/nginx.conf
+COPY /conf/default /etc/nginx/sites-enabled/default
+
+#GIVES ACCESS RIGHTS
+RUN chmod 755 /var/www/html
+RUN chown -R www-data:www-data /var/www/html
 
 EXPOSE 443
 
-ENTRYPOINT ["/usr/bin/dumb-init", "--"]
-
 CMD ["nginx", "-g", "daemon off;"]
-
