@@ -22,5 +22,5 @@ RUN chmod 755 /create_db.sh
 RUN mkdir -p /var/run/mysqld
 RUN chown -R mysql:mysql /var/run/mysqld
 
-#ENTRYPOINT ["/create_db.sh"]
-ENTRYPOINT tail -f /dev/null
+ENTRYPOINT ["/create_db.sh"]
+#ENTRYPOINT tail -f /dev/null
