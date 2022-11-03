@@ -22,3 +22,6 @@ else
 	sed -i "s/database_name_here/$MYSQL_DATA/g" wp-config-sample.php
 	mv wp-config-sample.php wp-config.php
 fi
+
+chown -R root:root /var/www/html/wordpress
+exec /usr/sbin/php-fpm7.3 -F -R
