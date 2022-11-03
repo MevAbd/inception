@@ -14,9 +14,10 @@ COPY ./conf/www.conf /etc/php/7.3/fpm/pool.d/
 
 EXPOSE 9000 
 
-COPY ./tools/create_wp.sh /usr/local/bin/
-ENTRYPOINT ["create_wp.sh"]
-
+COPY ./tools/create_wp.sh /var/www/html/
 WORKDIR /var/www/html
+RUN chmod 777 /var/www/html/create_wp.sh
+ENTRYPOINT ["./create_wp.sh"]
 
-ENTRYPOINT tail -f /dev/null 
+
+CMD ["/usr/sbin/php-fpm7.3", "-F", "-R"]
