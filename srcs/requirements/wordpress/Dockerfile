@@ -16,7 +16,7 @@ EXPOSE 9000
 
 COPY ./tools/create_wp.sh /var/www/html/
 WORKDIR /var/www/html
+
 RUN chmod 777 /var/www/html/create_wp.sh
+
 ENTRYPOINT ["./create_wp.sh"]
-RUN		chown -R root:root /var/www/wordpress
-ENTRYPOINT tail -f /dev/null
