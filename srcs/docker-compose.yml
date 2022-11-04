@@ -3,6 +3,34 @@ version: "3"
 services:
 
 ####                NGINX                ####    
+   nginx:
+    container_name: nginx
+    build: ./requirements/nginx
+    ports:
+      - "443:443"
+    restart: always
+    networks:
+      - inception
+    depends_on:
+      - wordpress
+    volumes:
+      - wp_data:/var/www/html/wordpress
+
+####                MARIADB                ####    
+    mariadb:
+      container_name: mariadb
+      build: ./requirements/mariadb
+      ports:
+        - "3306:3306"
+      restart: always
+      networks:
+        - inception
+      env_file: .env
+      volumes:
+        - db_data:/var/lib/mysql
+
+
+####                WORDPRESS                ####    
    wordpress:
     container_name: wordpress
     build: ./requirements/wordpress
@@ -12,6 +40,24 @@ services:
     networks:
       - inception
     env_file: .env
+    depends_on:
+      - mariadb
+    volumes:
+      - wp_data:/var/www/html/wordpress
     
 networks:
   inception:
+
+volumes:
+  db_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/malbrand/data/mysql
+      o: bind
+  wp_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/malbrand/data/wordpress
+      o: bind
