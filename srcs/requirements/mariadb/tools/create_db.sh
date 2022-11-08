@@ -4,7 +4,8 @@
 if [ -d "/var/lib/mysql/$MYSQL_DATA" ]
 then
 
-echo "\e[32mDatabase already exists\e[0m"
+#echo "\e[32mDatabase already exists\e[0m"
+mysqld_safe
 
 else
 

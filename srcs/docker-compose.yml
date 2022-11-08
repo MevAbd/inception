@@ -27,7 +27,7 @@ services:
     depends_on:
       - mariadb
     volumes:
-      - wp_data:/var/lib/mysql
+      - wp_data:/var/www/html
 
 ###      NGINX          ###
 
@@ -42,7 +42,7 @@ services:
     depends_on:
       - wordpress
     volumes:
-      - wp_data:/var/lib/mysql
+      - wp_data:/var/www/html
 
 ###      NETWORKS       ###
 
