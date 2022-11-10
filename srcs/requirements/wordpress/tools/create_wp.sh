@@ -11,8 +11,11 @@ wp core download --allow-root --locale=fr_FR
 
 if [ ! -f /var/www/html/wordpress/wp-config.php ];
 then
-	wp config create --allow-root --dbname=${MYSQL_DATA} --dbuser=${MYSQL_ADMIN} --dbpass=${MDB_MDP} --dbhost=${MYSQL_HOST} --path=${WP_PATH}
+	echo "SALUUUUUUTT"
+	wp config create --allow-root --dbname=${MYSQL_DATA} --dbuser=${MYSQL_USER} --dbpass=${MYSQL_PASSWORD} --dbhost=${MYSQL_HOST} --path=${WP_PATH}
+	echo "POPOPPOPOPOPO"
 fi
+
 
 wp core install --allow-root --url=${WP_DOMAIN} --title=${WP_NAME} --admin_user=${WP_ADMIN} --admin_password=${WP_PASS} --admin_email=${WP_MAIL}
 
