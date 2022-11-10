@@ -1,20 +1,26 @@
-#!/bin/sh
+#!/bin/bash
 
-if [ -f ./wordpress/wp-config.php ]
+sleep 5
+
+mkdir -p /var/www/html/wordpress
+chmod 777 /var/www/html
+chown -R www-data:www-data /var/www/html/
+cd /var/www/html/wordpress/
+
+wp core download --allow-root --locale=fr_FR
+
+if [ ! -f /var/www/html/wordpress/wp-config.php ];
 then
-	echo "wordpress already downloaded"
-else
-	wget https://wordpress.org/latest.tar.gz
-	tar -xzvf latest.tar.gz
-	rm -rf latest.tar.gz
-
-	cd /var/www/html/wordpress
-	sed -i "s/username_here/$MYSQL_USER/g" wp-config-sample.php
-	sed -i "s/password_here/$MYSQL_PASSWORD/g" wp-config-sample.php
-	sed -i "s/localhost/$DOMAIN_NAME/g" wp-config-sample.php
-	sed -i "s/database_name_here/$MYSQL_DATA/g" wp-config-sample.php
-	mv wp-config-sample.php wp-config.php
+	wp config create --allow-root --dbname=${MYSQL_DATA} --dbuser=${MYSQL_ADMIN} --dbpass=${MDB_MDP} --dbhost=${MYSQL_HOST} --path=${WP_PATH}
 fi
 
-chown -R root:root /var/www/html/wordpress
+wp core install --allow-root --url=${WP_DOMAIN} --title=${WP_NAME} --admin_user=${WP_ADMIN} --admin_password=${WP_PASS} --admin_email=${WP_MAIL}
+
+wp user create --allow-root ${WP_NUSER} ${WP_NUSER_MAIL} --role=author --user_pass=${WP_NUSER_PASS}
+
+wp theme install boldgrid-primas --activate --allow-root
+wp cache flush --allow-root
+
+mkdir /run/php
+
 exec /usr/sbin/php-fpm7.3 -F -R
