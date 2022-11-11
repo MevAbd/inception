@@ -1,0 +1,76 @@
+version: "3"
+
+services:
+
+###      MARIADB        ###
+
+  mariadb:
+    container_name: mariadb
+    build:
+      context: ./requirements/mariadb
+      args:
+        MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+        MYSQL_DATA: ${MYSQL_DATA}
+        MYSQL_USER: ${MYSQL_USER}
+        MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    restart: always
+    networks:
+      - inception
+    env_file: .env
+    volumes:
+      - db_data:/var/lib/mysql
+    depends_on:
+      - nginx
+    expose:
+      - "3306"
+    
+
+###      WORDPRESS      ###
+
+  wordpress:
+    container_name: wordpress
+    build: ./requirements/wordpress
+    restart: always
+    networks:
+      - inception
+    env_file: .env
+    depends_on:
+      - mariadb
+    volumes:
+      - wp_data:/var/www/html
+    expose:
+      - "9000"
+
+###      NGINX          ###
+
+  nginx:
+    container_name: nginx
+    build: ./requirements/nginx
+    ports:
+      - "443:443"
+    restart: always
+    networks:
+      - inception
+    volumes:
+      - wp_data:/var/www/html
+
+###      NETWORKS       ###
+
+networks:
+  inception:
+
+###      VOLUMES        ###
+
+volumes:
+  db_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/malbrand/data/mysql
+      o: bind
+  wp_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/malbrand/data/wordpress
+      o: bind
