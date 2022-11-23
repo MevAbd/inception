@@ -1,0 +1,31 @@
+#!/bin/bash
+
+	chown -R www-data:www-data /var/www/*;
+	chown -R 755 /var/www/*;
+
+if [ ! -f /var/www/html/wp-config.php ]; then
+	echo "Wordpress: setting up..."
+	echo "\e[0;31m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\e[0m"
+	wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar;
+	echo "\e[0;31m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\e[0m"
+	chmod +x wp-cli.phar; 
+	echo "\e[0;31m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\e[0m"
+	mv wp-cli.phar /usr/local/bin/wp;
+	echo "\e[0;31m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\e[0m"
+	cd /var/www/html;
+	echo "\e[0;31m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\e[0m"
+	wp core download --allow-root;
+	echo "\e[0;31m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\e[0m"
+	mv /var/www/wp-config.php /var/www/html/
+	echo "\e[0;31m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\e[0m"
+	echo "Wordpress: creating users..."
+	echo "\e[0;31m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\e[0m"
+	wp core install --allow-root --url=https://malbrand.42.fr --title=inception --admin_user=malbrand --admin_password=sqlokapi --admin_email=exemple@exemple.fr --path=/var/www/html/wordpress
+	echo "\e[0;31m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\e[0m"
+	wp user create --allow-root user exemplebis@exemple.fr --user_pass=usrpass;
+	echo "\e[0;31m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\e[0m"
+	echo "Wordpress: set up!"
+	echo "\e[0;31m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\e[0m"
+fi
+
+exec "$@"

@@ -1,66 +1,71 @@
-version: "3"
+version: '3'
 
 services:
-
-###      MARIADB        ###
-
   mariadb:
     container_name: mariadb
-    build: ./requirements/mariadb
-    restart: always
+    restart: unless-stopped
     networks:
       - inception
-    env_file: .env
+    env_file:
+      - .env
+    build:
+      context: ./requirements/mariadb
+      args:
+        MYSQL_DATA: ${MYSQL_DATA}
+        MYSQL_ADMIN: ${MYSQL_ADMIN}
+        MYSQL_PASS: ${MYSQL_PASS}
+        MYSQL_ROOT_PASS: ${MYSQL_ROOT_PASS}
     volumes:
-      - db_data:/var/lib/mysql
-    
-
-###      WORDPRESS      ###
+      - mariadb:/var/lib/mysql
+    expose:
+      - "3306"
 
   wordpress:
     container_name: wordpress
-    build: ./requirements/wordpress
-    restart: always
+    restart: unless-stopped
     networks:
       - inception
     env_file: .env
+    build:
+      context: ./requirements/wordpress
+      args:
+        MYSQL_DATA: ${MYSQL_DATA}
+        MYSQL_ADMIN: ${MYSQL_ADMIN}
+        MYSQL_PASS: ${MYSQL_PASS}
+        MYSQL_ROOT_PASS: ${MYSQL_ROOT_PASS}
     depends_on:
       - mariadb
     volumes:
-      - wp_data:/var/www/html
-
-###      NGINX          ###
+      - wordpress:/var/www/html
+    expose:
+      - "9000"
 
   nginx:
     container_name: nginx
     build: ./requirements/nginx
     ports:
       - "443:443"
-    restart: always
+    restart: unless-stopped
     networks:
       - inception
+    volumes:
+      - wordpress:/var/www/html
     depends_on:
       - wordpress
-    volumes:
-      - wp_data:/var/www/html
 
-###      NETWORKS       ###
-
+  
 networks:
   inception:
 
-###      VOLUMES        ###
-
 volumes:
-  db_data:
-    driver: local
+  mariadb:
     driver_opts:
       type: none
-      device: /home/malbrand/data/mysql
+      device: /home/malbrand/data/
       o: bind
-  wp_data:
-    driver: local
+  wordpress:
     driver_opts:
       type: none
-      device: /home/malbrand/data/wordpress
+      device: /home/malbrand/data/
       o: bind
+

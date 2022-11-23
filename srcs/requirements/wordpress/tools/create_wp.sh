@@ -1,29 +1,33 @@
 #!/bin/bash
 
-sleep 5
+wordpressPath=/var/www/html/wordpress
 
-mkdir -p /var/www/html/wordpress
-chmod 777 /var/www/html
-chown -R www-data:www-data /var/www/html/
-cd /var/www/html/wordpress/
+path=$wordpressPath
+url="malbrand.42.fr"
+title="inception"
+admin_user=$MYSQL_ADMIN
+admin_password=$MYSQL_PASS
+admin_email=xxx@xxx.fr
 
-wp core download --allow-root --locale=fr_FR
+function wp-cli() {
+wp --allow-root core install \
+		--path=$1 \
+		--url=$2/ \
+		--title=$3 \
+		--admin_user=$4 \
+		--admin_password=$5 \
+		--admin_email=$6	
+}
 
-if [ ! -f /var/www/html/wordpress/wp-config.php ];
-then
-	echo "SALUUUUUUTT"
-	wp config create --allow-root --dbname=${MYSQL_DATA} --dbuser=${MYSQL_USER} --dbpass=${MYSQL_PASSWORD} --dbhost=${MYSQL_HOST} --path=${WP_PATH}
-	echo "POPOPPOPOPOPO"
-fi
+
+wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar;
+mv wp-cli.phar /usr/bin/wp
+chmod 777 /usr/bin/wp
+
+rm -rf $wordpressPath;
+wp core download --allow-root --path=$wordpressPath;
+cp /root/wp-config.php $wordpressPath;
+wp-cli $path $title $admin_user $admin_password $admin_email;
 
 
-wp core install --allow-root --url=${WP_DOMAIN} --title=${WP_NAME} --admin_user=${WP_ADMIN} --admin_password=${WP_PASS} --admin_email=${WP_MAIL}
-
-wp user create --allow-root ${WP_NUSER} ${WP_NUSER_MAIL} --role=author --user_pass=${WP_NUSER_PASS}
-
-wp theme install boldgrid-primas --activate --allow-root
-wp cache flush --allow-root
-
-mkdir /run/php
-
-exec /usr/sbin/php-fpm7.3 -F -R
+/usr/sbin/php-fpm7.3 -F
