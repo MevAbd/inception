@@ -11,8 +11,12 @@ RUN apt-get install -y php-fpm
 RUN apt-get install -y mariadb-client
 RUN apt-get install -y curl
 
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+  && chmod +x wp-cli.phar \
+  && mv wp-cli.phar /usr/local/bin/wp
+
 COPY ./conf/www.conf /etc/php/7.3/fpm/pool.d/
-COPY ./tools/wp-config.php /root
+COPY ./tools/wp-config.php /root/
 COPY ./tools/create_wp.sh /var/www/
 
 ARG MYSQL_DATA
