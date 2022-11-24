@@ -9,6 +9,7 @@ RUN apt-get install -y php7.3-fpm
 RUN apt-get install -y php-mysql
 RUN apt-get install -y php-fpm
 RUN apt-get install -y mariadb-client
+RUN apt-get install -y curl
 
 COPY ./conf/www.conf /etc/php/7.3/fpm/pool.d/
 COPY ./tools/wp-config.php /root

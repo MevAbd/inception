@@ -7,7 +7,7 @@ url="malbrand.42.fr"
 title="inception"
 admin_user=$MYSQL_ADMIN
 admin_password=$MYSQL_PASS
-admin_email=xxx@xxx.fr
+admin_email=$MYSQL_MAIL
 
 function wp-cli() {
 wp --allow-root core install \
