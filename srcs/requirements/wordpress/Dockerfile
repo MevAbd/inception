@@ -20,6 +20,9 @@ COPY ./conf/www.conf /etc/php/7.3/fpm/pool.d/
 COPY ./tools/wp-config.php /root/
 COPY ./tools/create_wp.sh /var/www/
 
+RUN chmod -R 777 /var/www/html/wordpress/
+
+
 ARG MYSQL_DATA
 ARG MYSQL_ADMIN
 ARG MYSQL_PASS
