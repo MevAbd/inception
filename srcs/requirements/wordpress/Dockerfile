@@ -3,6 +3,7 @@ FROM debian:buster
 RUN apt-get update
 RUN apt-get upgrade -y 
 RUN apt-get install -y wget
+RUN apt-get install -y sendmail
 RUN apt-get install -y vim
 RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d
 RUN apt-get install -y php7.3-fpm
