@@ -35,3 +35,18 @@ fi
 #wp theme install --allow-root --path=/var/www/html/wordpress/ twentysixteen --activate
 
 #/usr/sbin/php-fpm7.3 -F
+
+
+
+wp config create --allow-root --dbname=wordpress --dbuser=malbrand --dbpass=sqlokapi --dbhost=mariadb 
+
+wp core install --allow-root --url="https://malbrand.42.fr" --title="inception" --admin_user="malbrand" --admin_password="sqlokapi" --admin_email="exem@exem.fr" 
+
+wp theme install --allow-root --path=/var/www/html/wordpress/ twentysixteen --activate
+
+
+
+
+
+
+

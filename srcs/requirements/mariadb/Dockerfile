@@ -20,4 +20,7 @@ RUN sed -i "s/_MYSQL_ROOT_PASS_/${MYSQL_ROOT_PASS}/g" /var/www/create_db.sql
 
 RUN service mysql start && mysql -u root < /var/www/create_db.sql && rm -rf /var/www/create_db.sql
 
+RUN mkdir -p /var/lib/mysql/wordpress
+RUN chmod 777 /var/lib/mysql/wordpress
+
 CMD ["mysqld"]
