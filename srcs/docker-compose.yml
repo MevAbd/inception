@@ -45,7 +45,7 @@ services:
     build: ./requirements/nginx
     ports:
       - "443:443"
-    restart: unless-stopped
+    restart: always
     networks:
       - inception
     volumes:

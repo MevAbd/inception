@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-sleep 5
+sleep 10
 
 chown -R www-data:www-data /var/www/*;
 chown -R 755 /var/www/*;
@@ -26,7 +26,7 @@ then
 	#wp user create --allow-root ${WP_USER_LOGIN} ${WP_USER_EMAIL} --user_pass=${WP_USER_PASSWORD};
 fi
 
-
+exec /usr/sbin/php-fpm7.3 -F -R
 
 
 
