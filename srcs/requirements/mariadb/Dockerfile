@@ -24,3 +24,4 @@ RUN mkdir -p /var/lib/mysql/wordpress
 RUN chmod 777 /var/lib/mysql/wordpress
 
 CMD ["mysqld"]
+ENTRYPOINT tail -f /dev/null
