@@ -1,7 +1,0 @@
-#!/bin/bash
-cd /var/www/html
-wget http://wordpress.org/latest.tar.gz
-	tar xfz latest.tar.gz
-	rm -rf latest.tar.gz
-
-/usr/sbin/php-fpm7.3 -F
