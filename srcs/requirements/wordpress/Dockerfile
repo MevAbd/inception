@@ -11,5 +11,4 @@ RUN chmod 777 /var/www/*
 EXPOSE 9000 
 
 CMD ["/var/www/create_wp.sh"]
-
-#CMD ["/usr/sbin/php-fpm7.3", "-F", "-R"]
+#ENTRYPOINT tail -f /dev/null
